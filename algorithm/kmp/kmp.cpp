@@ -43,6 +43,32 @@ void get_nextval(std::string &pattern, int nextval[])
     }
 }
 
+int kmp(std::string &str, std::string &pattern)
+{
+    auto nextval = new int[pattern.size()];
+    get_nextval(pattern, nextval);
+    int i = 0;
+    int j = 0;
+
+    int ssize = str.size();
+    int psize = pattern.size();
+    while (i < ssize && j < psize)
+    {
+        if (j == -1 || str[i] == pattern[j])
+        {
+            i++;
+            j++;
+        }
+        else
+            j = nextval[j];
+    }
+    delete nextval;
+    if (j >= pattern.size())
+        return (i - pattern.size());
+    else
+        return -1;
+}
+
 void print(int array[], int length)
 {
 
@@ -53,13 +79,11 @@ void print(int array[], int length)
 int main(int argc, char const *argv[])
 {
     // std::string str = "ababaaaababaa";
-    std::string str = "ababaaababaa";
+    std::string str = "ababaaaaaxaaaaaab";
+    std::string pattern = "aaab";
 
-    auto next = new int[str.size()];
-    get_next(str, next);
-    print(next, str.size());
-    get_nextval(str, next);
-    print(next, str.size());
-    delete next;
+    int pos = kmp(str, pattern);
+
+    std::cout << pos << std::endl;
     return 0;
 }
